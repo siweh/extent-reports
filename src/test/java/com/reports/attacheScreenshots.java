@@ -1,6 +1,7 @@
 package com.reports;
 
 import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
@@ -37,7 +38,7 @@ public class attacheScreenshots {
                 .info("This is a info message")
                         .addScreenCaptureFromBase64String(base64Code);
 
-        extent.createTest("Screenshot test 2", "This is for attaching screenshot to the test using base64")
+        extent.createTest("Screenshot test 2", "This is for attaching screenshot to the test using base64 along with a title")
                 .info("This is a info message")
                 .addScreenCaptureFromBase64String(base64Code, "guru page");
 
@@ -45,9 +46,21 @@ public class attacheScreenshots {
                 .info("This is a info message")
                 .addScreenCaptureFromPath(path);
 
-        extent.createTest("Screenshot test 4", "This is for attaching screenshot to the test using path test level")
+        extent.createTest("Screenshot test 4", "This is for attaching screenshot to the test using path test level along with a title")
                 .info("This is a info message")
                 .addScreenCaptureFromPath(path, "guru page");
+
+
+
+        extent.createTest("Screenshot test 5", "This is for attaching screenshot to the test using base64 test level under the Details part")
+                .info("This is a info message")
+                .fail(MediaEntityBuilder.createScreenCaptureFromBase64String(base64Code).build())
+                .fail(MediaEntityBuilder.createScreenCaptureFromBase64String(base64Code, "Guru Login page").build());
+
+        extent.createTest("Screenshot test 6", "This is for attaching screenshot to the test using path test level under the Details part")
+                .info("This is a info message")
+                .fail(MediaEntityBuilder.createScreenCaptureFromPath(path).build())
+                .fail(MediaEntityBuilder.createScreenCaptureFromPath(path, "Guru Login page").build());
 
         //Closing the report
         extent.flush();
@@ -70,7 +83,7 @@ public class attacheScreenshots {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("Screenshot saved successfully");
+
         return destinationFile.getAbsolutePath();
     }
 
@@ -78,7 +91,6 @@ public class attacheScreenshots {
     public static String captureScrenshot(){
         TakesScreenshot takesScreenshot = (TakesScreenshot) driver;
         String base64Code = takesScreenshot.getScreenshotAs(OutputType.BASE64);
-        System.out.println("Screenshot saved successfully");
         return base64Code;
     }
 }
